@@ -1,0 +1,14 @@
+// Getters
+export const GETTERS_INIT_TODOS = "GETTERS_INIT_TODOS";
+export const GETTERS_INIT_TODO = "GETTERS_INIT_TODO";
+
+// Mutations
+export const MUTATE_GET_TODOS = "MUTATE_GET_TODOS";
+export const MUTATE_GET_TODO = "MUTATE_GET_TODO";
+
+// Actions
+export const ACTION_GET_TODOS = "ACTION_GET_TODOS";
+export const ACTION_GET_TODO = "ACTION_GET_TODO";
+export const ACTION_ADD_TODO = "ACTION_ADD_TODO";
+export const ACTION_UPDATE_TODO = "ACTION_UPDATE_TODO";
+export const ACTION_REMOVE_TODO = "ACTION_REMOVE_TODO";

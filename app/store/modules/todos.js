@@ -5,13 +5,16 @@ import BaseUrl from "./api-config";
 
 const state = {
   todos: [],
-  todo: {}
+  todo: {},
+  isLoading: false,
+  errorMessage: ""
 };
 
 const mutations = {
   [types.MUTATE_GET_TODOS](state, todos) {
     state.todos = todos;
   },
+
   [types.MUTATE_GET_TODO](state, todo) {
     state.todo = todo;
   },
@@ -27,7 +30,12 @@ const mutations = {
 
   [types.MUTATE_REMOVE_TODO](state, id) {
     const index = state.todos.findIndex(v => v.id === id);
+    alert(index);
     state.todos.splice(index, 1);
+  },
+
+  [types.MUTATE_TOGGLE_ISLOADING](state) {
+    state.isLoading = !state.isLoading;
   }
 };
 
@@ -60,13 +68,22 @@ const actions = {
     });
   },
   [types.ACTION_UPDATE_TODO]({ commit }, todo) {
-    return axios.put(`${BaseUrl.todos}/${todo.id}`, todo).then(response => {
-      commit(types.MUTATE_UPDATE_TODO, response.data).catch(err => {
+    commit(types.MUTATE_TOGGLE_ISLOADING);
+    return axios
+      .put(`${BaseUrl.todos}/${todo.id}`, todo)
+      .then(response => {
+        commit(types.MUTATE_UPDATE_TODO, response.data);
+      })
+      .then(() => {
+        commit(types.MUTATE_TOGGLE_ISLOADING);
+        return Promise.resolve();
+      })
+      .catch(err => {
         alert("Something happened: " + err);
+        commit(types.MUTATE_TOGGLE_ISLOADING);
       });
-      return Promise.resolve();
-    });
   },
+
   [types.ACTION_REMOVE_TODO]({ commit }, todo) {
     return axios.delete(`${BaseUrl.todos}/${todo.id}`).then(() => {
       commit(types.MUTATE_REMOVE_TODO, todo.id).catch(err => {
@@ -79,7 +96,8 @@ const actions = {
 
 const getters = {
   [types.GETTERS_INIT_TODOS]: state => state.todos,
-  [types.GETTERS_INIT_TODO]: state => state.todo
+  [types.GETTERS_INIT_TODO]: state => state.todo,
+  [types.GETTERS_ISLOADING]: state => state.isLoading
 };
 
 export default {

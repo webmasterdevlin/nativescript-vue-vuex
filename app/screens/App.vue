@@ -6,13 +6,13 @@
         <v-template>
           <Label
             :text="todo.text"
-            @doubletap="onDoubleTap(todo)"
-            @longpress="onLongPress(todo)"
-            class="m-20"
+            @doubletap="onEdit(todo)"
+            @longpress="onRemove(todo)"
+            :class="todo.isDone === true ? 'is-done m-20' : 'not-done m-20'"
           ></Label>
         </v-template>
       </ListView>
-      <NewTodo></NewTodo>
+      <NewTodo :newTodo="newTodo" @handleOnSave="onSave"></NewTodo>
     </FlexboxLayout>
   </Page>
 </template>
@@ -26,6 +26,15 @@ import NewTodo from "../components/NewTodo";
 export default {
   name: "App",
   components: { NewTodo },
+
+  data() {
+    return {
+      newTodo: {
+        text: "",
+        isDone: false
+      }
+    };
+  },
   computed: {
     ...mapGetters({
       todos: types.GETTERS_INIT_TODOS,
@@ -35,25 +44,26 @@ export default {
   methods: {
     ...mapActions({
       initTodos: types.ACTION_GET_TODOS,
+      saveTodo: types.ACTION_ADD_TODO,
       removeTodo: types.ACTION_REMOVE_TODO
     }),
-    onLongPress: function(todo) {
+    onRemove: function(todo) {
       this.removeTodo(todo);
     },
-    onDoubleTap: function(todo) {
-      this.$navigateTo(Detail, {
-        animated: true,
-        transition: {
-          name: "slideLeft",
-          duration: 250,
-          curve: "easeIn"
-        },
+    onEdit: function(todo) {
+      this.$showModal(Detail, {
         props: {
           todo
         }
       });
     },
-    onTap() {}
+    async onSave() {
+      if (!this.newTodo.text) {
+        alert("Please name your task");
+        return;
+      }
+      await this.saveTodo(this.newTodo);
+    }
   },
 
   mounted() {
@@ -66,5 +76,11 @@ export default {
 ActionBar {
   background-color: #53ba82;
   color: #ffffff;
+}
+.not-done {
+  font-style: italic;
+}
+.is-done {
+  text-decoration: line-through;
 }
 </style>

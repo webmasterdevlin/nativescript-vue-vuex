@@ -2,14 +2,29 @@
   <Page>
     <ActionBar title="Detail Page" />
     <StackLayout>
-      <TextField v-model="todo.text" :hint="todo.text" class="m-20"></TextField>
+      <FlexboxLayout
+        class="m-20"
+        flexDirection="row"
+        justifyContent="space-between"
+      >
+        <TextField
+          v-model="todo.text"
+          width="90%"
+          :hint="todo.text"
+        ></TextField>
+        <Switch
+          :checked="todo.isDone"
+          @checkedChange="todo.isDone = !todo.isDone"
+        ></Switch>
+      </FlexboxLayout>
       <Button
         class="btn btn-primary"
-        id="button"
+        id="update"
         :isEnabled="!isLoading"
         text="Update"
         @tap="onSubmit"
       ></Button>
+      <Button id="cancel" text="Cancel" @tap="onCancel"></Button>
     </StackLayout>
   </Page>
 </template>
@@ -20,6 +35,7 @@ import * as types from "../store/types";
 export default {
   props: ["todo"], // Getting the todo object passed from the previous page
   name: "Detail",
+
   computed: {
     ...mapGetters({
       isLoading: types.GETTERS_ISLOADING
@@ -33,12 +49,13 @@ export default {
     async onSubmit() {
       try {
         await this.updateTodo(this.todo);
-        this.$emit("updatedTodo", this.todo);
-        this.back();
-      } catch (e) {}
+        this.$modal.close();
+      } catch (e) {
+        alert(`${e.message}: Please try again.`);
+      }
     },
-    back() {
-      this.$navigateBack();
+    onCancel() {
+      this.$modal.close();
     }
   }
 };

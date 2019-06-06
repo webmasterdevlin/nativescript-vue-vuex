@@ -30,7 +30,6 @@ const mutations = {
 
   [types.MUTATE_REMOVE_TODO](state, id) {
     const index = state.todos.findIndex(v => v.id === id);
-    alert(index);
     state.todos.splice(index, 1);
   },
 
@@ -59,6 +58,7 @@ const actions = {
       return Promise.resolve();
     });
   },
+
   [types.ACTION_ADD_TODO]({ commit }, todoData) {
     return axios.post(BaseUrl.todos, todoData).then(response => {
       commit(types.MUTATE_ADD_TODO, response.data).catch(err => {
@@ -67,6 +67,7 @@ const actions = {
       return Promise.resolve();
     });
   },
+
   [types.ACTION_UPDATE_TODO]({ commit }, todo) {
     commit(types.MUTATE_TOGGLE_ISLOADING);
     return axios

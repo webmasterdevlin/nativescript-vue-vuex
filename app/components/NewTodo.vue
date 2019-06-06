@@ -1,6 +1,7 @@
 <template>
   <StackLayout height="20%">
     <TextField
+      v-model="newTodo.text"
       hint="write a task here"
       returnKeyType="done"
       autocorrect="false"
@@ -12,14 +13,25 @@
       class="btn btn-primary"
       id="button"
       text="Add"
-      @tap="onTap"
+      @tap="onSave"
     ></Button>
   </StackLayout>
 </template>
 
 <script>
 export default {
-  name: "NewTodo"
+  name: "NewTodo",
+  props: {
+    newTodo: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  methods: {
+    onSave() {
+      this.$emit("handleOnSave"); // triggers the method of the container (parent)
+    }
+  }
 };
 </script>
 

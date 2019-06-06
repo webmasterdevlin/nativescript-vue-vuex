@@ -43,7 +43,7 @@ const actions = {
     return axios
       .get(BaseUrl.todos)
       .then(response => {
-        commit(types.MUTATE_GET_TODOS, response.data.data);
+        commit(types.MUTATE_GET_TODOS, response.data);
         return Promise.resolve();
       })
       .catch(err => {

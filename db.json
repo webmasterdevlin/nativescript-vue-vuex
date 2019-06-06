@@ -1,0 +1,19 @@
+{
+  "todos": [
+    {
+      "text": "Hi",
+      "isDone": false,
+      "id": 1
+    },
+    {
+      "text": "Hello",
+      "isDone": false,
+      "id": 2
+    },
+    {
+      "text": "Mo",
+      "isDone": true,
+      "id": 3
+    }
+  ]
+}

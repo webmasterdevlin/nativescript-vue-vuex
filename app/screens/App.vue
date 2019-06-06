@@ -66,8 +66,8 @@ export default {
     }
   },
 
-  mounted() {
-    this.initTodos();
+  async mounted() {
+    await this.initTodos();
   }
 };
 </script>
